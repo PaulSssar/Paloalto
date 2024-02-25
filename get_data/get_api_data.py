@@ -8,11 +8,6 @@ from db.models import Logs, engine
 from get_token import base64_encode
 from requests_data import request_get
 
-data = {
-    'user': 'url-admin',
-    'password': '4V5XSBezZAWxlE5ajNj1'
-}
-
 
 def get_time_update():
     last_receive_time = dt.datetime.now() - dt.timedelta(seconds=UPDATE_TIME)
