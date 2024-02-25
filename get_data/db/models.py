@@ -6,7 +6,7 @@ from sqlalchemy import Column, MetaData, create_engine
 
 uri = f'clickhouse://{os.getenv("DB_USER")}:{os.getenv("DB_PASSWORD")}@clickhouse:8123'
 
-engine = create_engine(uri, pool_size=20, max_overflow=20)
+engine = create_engine(uri)
 session = make_session(engine)
 metadata = MetaData()
 
