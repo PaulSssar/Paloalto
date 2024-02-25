@@ -2,3 +2,4 @@
 venv/
 paloalto_bot/venv
 paloalto_web/venv
+infra/.env
