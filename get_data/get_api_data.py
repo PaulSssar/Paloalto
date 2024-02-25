@@ -33,7 +33,7 @@ async def parse_xml(xml, key, all_obj=False):
 
 
 async def get_job():
-    xml = await get_data(URL + f'?type=log&log-type=url&query=( receive_time geq "{get_time_update()}" )')
+    xml = await get_data(URL + f'?type=log&log-type=url&query=( receive_time geq "{get_time_update()}" )&nlogs=5000')
     key = './/job'
     if xml:
         job = await parse_xml(xml, key)
