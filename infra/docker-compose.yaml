@@ -1,0 +1,38 @@
+version: 3.11.3
+
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    ports:
+      - "8123:8123"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+
+  api_data:
+    build:
+      context: ../get_data
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - clickhouse
+
+  bot:
+    build:
+      context: ../paloalto_bot
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - clickhouse
+
+  web:
+    build:
+      context: ../paloalto_web
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - clickhouse
+
+volumes:
+  clickhouse_data:
