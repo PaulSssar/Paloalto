@@ -8,7 +8,7 @@ from handlers.hanlers import router
 
 
 async def main():
-    bot = Bot(token=os.getenv("TOKEN")
+    bot = Bot(token=os.getenv("TOKEN"))
     dp = Dispatcher()
     dp.include_router(router)
     await bot.set_my_commands(
