@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 
 from aiogram import Bot, Dispatcher
 from aiogram.types import BotCommand
@@ -7,7 +8,7 @@ from handlers.hanlers import router
 
 
 async def main():
-    bot = Bot(token='5898111041:AAFj7NOvbYnM_My5RHf40X2wY-F-ommkFcI')
+    bot = Bot(token=os.getenv("TOKEN")
     dp = Dispatcher()
     dp.include_router(router)
     await bot.set_my_commands(
