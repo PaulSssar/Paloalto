@@ -33,7 +33,7 @@ async def parse_xml(xml, key, all_obj=False):
 
 
 async def get_job():
-    xml = await get_data(URL + f'?type=log&log-type=url&query=( receive_time geq "{get_time_update()}" )')
+    xml = await get_data(URL + f'?type=log&log-type=url&query=( receive_time geq "{get_time_update()}" )&nlogs=5000')
     key = './/job'
     if xml:
         job = await parse_xml(xml, key)
@@ -51,24 +51,29 @@ async def get_api_data():
 
 async def save_data():
     data = await get_api_data()
+    data_to_save = []
+    for site in data:
+        misc = site.find('misc').text
+        receive_time = site.find('receive_time').text
+        receive_time = dt.datetime.strptime(receive_time, '%Y/%m/%d %H:%M:%S')
+        category = site.find('category').text
+        serial = site.find('serial').text
+        high_res_timestamp = site.find('high_res_timestamp').text
+        high_res_timestamp = dt.datetime.strptime(high_res_timestamp, '%Y-%m-%dT%H:%M:%S.%f%z')
+        category_list = site.find('url_category_list').text
+
+        data_to_save.append({
+            'url': misc,
+            'receive_time': receive_time,
+            'category': category,
+            'serial': serial,
+            'logs_time': high_res_timestamp,
+            'category_list': category_list
+        })
+
     with engine.connect() as connection:
-        for site in data:
-            misc = site.find('misc').text
-            receive_time = site.find('receive_time').text
-            receive_time = dt.datetime.strptime(receive_time, '%Y/%m/%d %H:%M:%S')
-            category = site.find('category').text
-            serial = site.find('serial').text
-            high_res_timestamp = site.find('high_res_timestamp').text
-            high_res_timestamp = dt.datetime.strptime(high_res_timestamp, '%Y-%m-%dT%H:%M:%S.%f%z')
-            category_list = site.find('url_category_list').text
-            connection.execute(Logs.__table__.insert().values(
-                url=misc,
-                receive_time=receive_time,
-                category=category,
-                serial=serial,
-                logs_time=high_res_timestamp,
-                category_list=category_list
-            ))
+        connection.execute(Logs.__table__.insert(), data_to_save)
+
     await asyncio.sleep(UPDATE_TIME)
 
 while True:

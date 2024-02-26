@@ -1,6 +1,6 @@
 import re
-from collections import Counter
 
+from sqlalchemy import func
 from clickhouse_sqlalchemy import make_session
 from db import Logs, engine
 from fastapi import HTTPException, FastAPI, Query
@@ -16,8 +16,9 @@ class Domain(BaseModel):
 @app.get('/categories/')
 def get_categories():
     session = make_session(engine)
-    categories = Counter(session.query(Logs.category).all())
-    result = [{"category": key[0], "count": value} for key, value in categories.items()]
+    categories = session.query(Logs.category,
+                               func.count(Logs.category)).group_by(Logs.category)
+    result = [{"category": key[0], "count": value} for key, value in categories]
     return {"categories": result}
 
 

@@ -27,6 +27,7 @@ services:
       - .env
     depends_on:
       - clickhouse
+      - api_data
 
   web:
     build:
@@ -39,6 +40,7 @@ services:
       - .env
     depends_on:
       - clickhouse
+      - api_data
 
 volumes:
   clickhouse_data:

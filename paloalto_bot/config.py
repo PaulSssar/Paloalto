@@ -1,1 +1,1 @@
-LOG_TIME = 60
+LOG_TIME = 5
