@@ -17,7 +17,7 @@ class Domain(BaseModel):
 def get_categories():
     session = make_session(engine)
     categories = session.query(Logs.category,
-                               func.count(Logs.category)).group_by(Logs.category)
+                               func.count(Logs.category)).group_by(Logs.category).order_by(func.count(Logs.category))
     result = [{"category": key, "count": value} for key, value in categories]
     return {"categories": result}
 

@@ -1,1 +1,3 @@
-LOG_TIME = 10800
+import os
+
+LOG_TIME = int(os.getenv('LOG_TIME'))

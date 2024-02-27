@@ -1,2 +1,4 @@
-UPDATE_TIME = 10
-URL = 'https://158.160.107.48/api/'
+import os
+
+UPDATE_TIME = int(os.getenv('UPDATE_TIME'))
+URL = os.getenv('URL')
