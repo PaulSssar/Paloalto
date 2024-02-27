@@ -7,6 +7,10 @@ services:
       - "8123:8123"
     volumes:
       - clickhouse_data:/var/lib/clickhouse
+    environment:
+      - CLICKHOUSE_DB=default
+      - CLICKHOUSE_USER=${CLICKHOUSE_USER}
+      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD}
 
   api_data:
     build:
