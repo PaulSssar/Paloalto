@@ -4,7 +4,9 @@ from clickhouse_sqlalchemy import (Table, engines, get_declarative_base,
                                    make_session, types)
 from sqlalchemy import Column, MetaData, create_engine
 
+
 uri = f'clickhouse://{os.getenv("CLICKHOUSE_USER")}:{os.getenv("CLICKHOUSE_PASSWORD")}@clickhouse:8123'
+
 
 engine = create_engine(uri, pool_size=20, max_overflow=20)
 session = make_session(engine)
