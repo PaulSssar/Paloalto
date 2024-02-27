@@ -1,12 +1,19 @@
+# Paloalto
+#### Приложение Paloalto создано для получение логов с сайта Paloalto. Эти логи сохраняются в базу данных Clickhouse. Получить отчет по логам можно через Telegram бота и через веб-приложение.
+#### Приложение состоит из сервисов:
+ - get_data - осуществляет запросы к api и сохранение результатов в Clickhouse.
+ - paloalto_bot - осуществляет рассылку логов в телеграм.
+ - paloalto_web - веб-приложение для выдачи количества запросов по категории сайтов и поиск запросовпо имени сайта.
 ## Установка
 ### Шаблон описания файла .env
  - USER=<логин paloalto>
  - PASSWORD=<пароль paloalto>
- - DB_USER=<логин clickhouse>
- - DB_PASSWORD=<логин clickhouse>
+ - CLICKHOUSE_DB=<название таблицы clickhouse>
+ - CLICKHOUSE_USER=<логин clickhouse>
+ - CLICKHOUSE_PASSWORD=<логин clickhouse>
  - TOKEN=<токен бота Телеграм>
 ### Инструкции для развертывания и запуска приложения
-для Linux-систем все команды необходимо выполнять от имени администратора1
+для Linux-систем все команды необходимо выполнять от имени администратора
 - Склонировать репозиторий
 ```bash
 git clone git@github.com:PaulSssar/Paloalto.git
@@ -20,13 +27,14 @@ apt install docker.io
 ```bash
 apt install docker-compose
 ```
-
-- Скопировать файл docker-compose.yml:
+Перейти в папку infra:
 ```bash
-scp docker-compose.yml <username>@<host>:/home/<username>/docker-compose.yml
+cd infra
 ```
 - Создать .env файл по предлагаемому выше шаблону.
-
+```bash
+touch .env
+```
 - собрать и запустить контейнеры на сервере:
 ```bash
 docker-compose up -d --build
@@ -35,6 +43,20 @@ docker-compose up -d --build
 ## API сайта:
 - http://host:8000/categories/ - Получение количества сайтов по категориям
 - http://host:8000/search/?domain=<domain> - Поиск по домену и получение всей информации по результату поиска
+
+## Управление частотой уведомлений:
+Для изменения частоты уведомлений в Телеграм необходимо перейти в файл конфигурации:
+```bash
+cd paloalto_bot/config.py
+```
+Задать время LOG_TIME в секундах
+## Управление частотой запросов к API:
+Для изменения частоты уведомлений в Телеграм необходимо перейти в файл конфигурации:
+```bash
+cd get_data/config.py
+```
+Задать время UPDATE_TIME в секундах
+
 ## Автор
 Павел Сарыгин 
 

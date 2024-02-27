@@ -1,1 +1,1 @@
-LOG_TIME = 5
+LOG_TIME = 10800

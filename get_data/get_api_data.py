@@ -33,7 +33,8 @@ async def parse_xml(xml, key, all_obj=False):
 
 
 async def get_job():
-    xml = await get_data(URL + f'?type=log&log-type=url&query=( receive_time geq "{get_time_update()}" )&nlogs=5000')
+    url = URL + f'?type=log&log-type=url&query=(receive_time geq \'{get_time_update()}\')'
+    xml = await get_data(url)
     key = './/job'
     if xml:
         job = await parse_xml(xml, key)
@@ -43,6 +44,7 @@ async def get_job():
 
 async def get_api_data():
     job = await get_job()
+    print(job)
     xml = await get_data(URL + '?type=log&action=get&job-id=' + job)
     key = './/entry'
     data = await parse_xml(xml, key, True)
@@ -61,21 +63,18 @@ async def save_data():
         high_res_timestamp = site.find('high_res_timestamp').text
         high_res_timestamp = dt.datetime.strptime(high_res_timestamp, '%Y-%m-%dT%H:%M:%S.%f%z')
         category_list = site.find('url_category_list').text
-
         data_to_save.append({
-            'url': misc,
-            'receive_time': receive_time,
-            'category': category,
-            'serial': serial,
-            'logs_time': high_res_timestamp,
-            'category_list': category_list
-        })
-
+                'url': misc,
+                'receive_time': receive_time,
+                'category': category,
+                'serial': serial,
+                'logs_time': high_res_timestamp,
+                'category_list': category_list
+            })
     with engine.connect() as connection:
         connection.execute(Logs.__table__.insert(), data_to_save)
-
     await asyncio.sleep(UPDATE_TIME)
+
 
 while True:
     asyncio.run(save_data())
-

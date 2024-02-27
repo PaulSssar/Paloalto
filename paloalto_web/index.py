@@ -18,7 +18,7 @@ def get_categories():
     session = make_session(engine)
     categories = session.query(Logs.category,
                                func.count(Logs.category)).group_by(Logs.category)
-    result = [{"category": key[0], "count": value} for key, value in categories]
+    result = [{"category": key, "count": value} for key, value in categories]
     return {"categories": result}
 
 
