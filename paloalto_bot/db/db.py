@@ -29,7 +29,7 @@ class Logs(Base):
 
 
 async def get_last_receive_time():
-    last_receive_time = dt.datetime.now() - dt.timedelta(seconds=os.getenv('LOG_TIME'))
+    last_receive_time = dt.datetime.now() - dt.timedelta(seconds=int(os.getenv('LOG_TIME')))
     return last_receive_time
 
 
